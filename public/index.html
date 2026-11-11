@@ -7,10 +7,13 @@
     <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
-    <h1>Recommended Systems</h1>
+    <main>
 
     <div>
         <form action="">
+            <h1>Recommended Systems</h1>
+
+            <br>
             <label for="user">
             User
 
@@ -32,22 +35,20 @@
                 <input type="text" value="3">
             </label>
 
-            <button type="submit">Find top matching users</button>
-            <button type="submit">Find recommended movies</button>
-            <button type="submit">Find recommendedations, item-based</button>
+            <div id="form-buttons">
+                <button type="submit">Find top matching users</button>
+                <button type="submit">Find recommended movies</button>
+                <button type="submit">Find recommendedations, item-based</button>
+            </div>
         </form>
-
         <hr>
 
-        <p>The results</p>
-        <div id="result-div">
 
+        <div id="result-div">
         </div>
     </div>
 
-
-
-
+    </main>
     <script type="module" src="./js/index.js"></script>
 </body>
 </html>

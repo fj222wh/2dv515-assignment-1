@@ -2,3 +2,63 @@
     margin: 0;
     padding: 0;
 }
+
+:root {
+    --primary-bg-color: #ffd8eb;
+    --lighter-primary: #ffe9f3;
+    --light: #fcf8f9;
+    --secondary-lighter: #e0e6ff;
+    --secondary-darker: #9facec;
+    --secondary-darker-darker: #7080cd;
+    --dark: #232323;
+    
+}
+
+body {
+    background-color: var(--secondary-lighter);
+}
+main {
+    max-width: 1000px;
+    width: 90%;
+    margin: 0 auto;
+    padding: 2em;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+main h1 {
+    color: var(--dark);
+}
+
+form {
+    background-color: var(--light);
+    padding: 20px;
+    border-radius: 10px;
+    margin: 2em 0;
+}
+
+#form-buttons {
+    padding: 1em 0;
+    display: flex;
+    gap: 1em;
+}
+
+#form-buttons button {
+    padding: 0.5em;
+    background-color: var(--secondary-darker);
+    border-radius: 20px;
+    border: none;
+    color: white;
+    transition: all 0.25s ease;
+}
+
+#form-buttons button:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+    cursor: pointer;
+    background-color: var(--secondary-darker-darker);
+}
+
+hr {
+    border: 2px solid var(--secondary-darker);
+    border-radius: 10px;
+}
