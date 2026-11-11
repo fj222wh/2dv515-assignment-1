@@ -24,6 +24,8 @@ form.addEventListener('submit', async (event) => {
         renderResult(resultDiv, data)
     } else if (triggeredBtnId === 'btn-item-based-recommendations') {
         alert('Get item based recommendations')
+        const similarity = 'euclidean'
+        // Item based ska BARA använda EUCLIDEIAN
         const data = await getRecommendations()
         renderResult(resultDiv, data)
     }
