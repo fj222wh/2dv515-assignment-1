@@ -1,54 +1,51 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Recommended Systems</title>
-    <link rel="stylesheet" href="./css/style.css">
-</head>
-<body>
+    <link rel="stylesheet" href="./css/style.css" />
+  </head>
+  <body>
     <main>
+      <div>
+        <form action="" id="form">
+          <h1>Recommended Systems</h1>
 
-    <div>
-        <form action="">
-            <h1>Recommended Systems</h1>
-
-            <br>
-            <label for="user">
+          <br />
+          <label for="user">
             User
 
             <select name="user" id="user">
-                <option value="0">User 0 (TEST!)</option>
+              <option value="0">User 0 (TEST!)</option>
             </select>
-            </label>
+          </label>
 
-            <label for="similarity">
-                Similarity
+          <label for="similarity">
+            Similarity
 
-                <select name="similarity" id="similarity">
-                    <option value="x">x method</option>
-                </select>
-            </label>
+            <select name="similarity" id="similarity">
+                <option value="euclidean">Euclidean</option>
+                <option value="pearson">Pearson</option>
+            </select>
+          </label>
 
-            <label for="results">
-                Results:
-                <input type="text" value="3">
-            </label>
+          <label for="results">
+            Results:
+            <input type="text" value="3" />
+          </label>
 
-            <div id="form-buttons">
-                <button type="submit">Find top matching users</button>
-                <button type="submit">Find recommended movies</button>
-                <button type="submit">Find recommendedations, item-based</button>
-            </div>
+          <div id="form-buttons">
+            <button id="btn-match-users" type="submit">Find top matching users</button>
+            <button id="btn-recommend-movies" type="submit">Find recommended movies</button>
+            <button id="btn-item-based-recommendations" type="submit">Find recommendedations, item-based</button>
+          </div>
         </form>
-        <hr>
+        <hr />
 
-
-        <div id="result-div">
-        </div>
-    </div>
-
+        <div id="result-div"></div>
+      </div>
     </main>
     <script type="module" src="./js/index.js"></script>
-</body>
+  </body>
 </html>
