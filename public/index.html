@@ -9,5 +9,45 @@
 <body>
     <h1>Recommended Systems</h1>
 
+    <div>
+        <form action="">
+            <label for="user">
+            User
+
+            <select name="user" id="user">
+                <option value="0">User 0 (TEST!)</option>
+            </select>
+            </label>
+
+            <label for="similarity">
+                Similarity
+
+                <select name="similarity" id="similarity">
+                    <option value="x">x method</option>
+                </select>
+            </label>
+
+            <label for="results">
+                Results:
+                <input type="text" value="3">
+            </label>
+
+            <button type="submit">Find top matching users</button>
+            <button type="submit">Find recommended movies</button>
+            <button type="submit">Find recommendedations, item-based</button>
+        </form>
+
+        <hr>
+
+        <p>The results</p>
+        <div id="result-div">
+
+        </div>
+    </div>
+
+
+
+
+    <script type="module" src="./js/index.js"></script>
 </body>
 </html>
