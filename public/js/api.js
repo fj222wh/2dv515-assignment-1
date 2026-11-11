@@ -1,7 +1,11 @@
 export async function getUsers() {
-    const users = {}
+    const res = await fetch('/api/users', {
+        method: 'GET',
+        'Content-Type': 'application/json'
+    })
 
-    return users
+    const data = await res.json()
+    return data.users
 
 }
 

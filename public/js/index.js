@@ -1,5 +1,5 @@
 import { renderUsers } from "./ui.js"
-import { getRecommendations } from "./api.js"
+import { getRecommendations, getUsers } from "./api.js"
 import { renderResult } from "./ui.js"
 // The form-selections
 
@@ -32,4 +32,6 @@ form.addEventListener('submit', async (event) => {
 })
 
 // Users ska renderas i början när applikationen startar
-renderUsers(userList)
+const userData = await getUsers()
+console.log(userData)
+renderUsers(userList, userData)
