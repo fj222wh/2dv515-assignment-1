@@ -8,8 +8,8 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 
 app.set('trust proxy', 1)
 app.use((req, res, next) => {
-    res.set('X-Served-By', process.env.HOSTNAME ?? 'local')
-    next()
+  res.set('X-Served-By', process.env.HOSTNAME ?? 'local')
+  next()
 })
 
 app.use(express.json())
@@ -18,7 +18,7 @@ app.use(router)
 
 const PORT = process.env.PORT ?? 3000
 const server = app.listen(PORT, () => {
-    console.log(`App listening on http://localhost:${PORT}`)
+  console.log(`App listening on http://localhost:${PORT}`)
 })
 
 server.on('error', (err) => {
