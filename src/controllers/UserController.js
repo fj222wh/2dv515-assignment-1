@@ -1,3 +1,5 @@
+import { parseCSV } from "../helpers/parseCSV.js"
+
 export class UserController {
 
     /**
@@ -7,7 +9,7 @@ export class UserController {
      * @param {*} next 
      */
     index(req, res, next) {
-        res.status(200).json({message: 'hej från user controller'})
-
+        const users = parseCSV('./data/users.csv')
+        res.status(200).json({users})
     }
 }

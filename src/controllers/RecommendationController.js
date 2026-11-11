@@ -1,3 +1,5 @@
+import { parseCSV } from "../helpers/parseCSV.js"
+
 export class RecommendationController {
 
     /**
@@ -7,6 +9,8 @@ export class RecommendationController {
      * @param {*} next 
      */
     index(req, res, next) {
-        res.status(200).json({message: 'hello from recommendationcontroller'})
+        const data = parseCSV('./data/movies.csv')
+
+        res.status(200).json({data})
     }
 }

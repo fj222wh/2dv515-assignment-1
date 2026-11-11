@@ -4,7 +4,7 @@ import recommendationRouter from './recommendations.js'
 
 const router = Router()
 
-router.use('/api/user', userRouter)
+router.use('/api/users', userRouter)
 router.use('/api/recommendations', recommendationRouter)
 
 
