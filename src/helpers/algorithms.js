@@ -5,17 +5,14 @@
  * @author Filippa Johansson
  */
 
-
 /**
- * 
- * @param {*} obj1 
- * @param {*} obj2 
+ *
+ * @param {*} obj1
+ * @param {*} obj2
  */
 export function euclideanDistance(user1, user2) {
-    console.log('Hello from euclidean distance')
-    return 2 * Math.random(2).toFixed(2)
-
-
+  console.log('Hello from euclidean distance')
+  return 2 * Math.random(2).toFixed(2)
 }
 
 /**
@@ -24,7 +21,6 @@ export function euclideanDistance(user1, user2) {
  * @param {Object} data The data
  */
 export function pearsonDistance(user1, user2) {
-    console.log('hello from pearson distance')
-    return 2 * Math.random(2).toFixed(2)
-
+  console.log('hello from pearson distance')
+  return 2 * Math.random(2).toFixed(2)
 }

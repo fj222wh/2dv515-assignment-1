@@ -7,5 +7,4 @@ const router = Router()
 router.use('/api/users', userRouter)
 router.use('/api/recommendations', recommendationRouter)
 
-
 export default router

@@ -9,15 +9,12 @@ const resultDiv = document.getElementById('result-div')
 form.addEventListener('submit', async (event) => {
     event.preventDefault()
 
-    const triggeredBtnId = event.submitter.id
+    try {
+            const triggeredBtnId = event.submitter.id
     
     if (triggeredBtnId === 'btn-match-users') {
-        alert('Get matching users')
         const body = Object.fromEntries(new FormData(form))
         const data = await getRecommendations(body, 'users')
-
-        console.log('Data we got after finding matching users...')
-        console.log(data)
         renderMatchingUsers(resultDiv, data)
     } else if (triggeredBtnId === 'btn-recommend-movies') {
         alert('Get recommended movies')
@@ -25,7 +22,7 @@ form.addEventListener('submit', async (event) => {
         const data = await getRecommendations(body, 'movies')
         renderRecommendedMovies(resultDiv, data)
     } else if (triggeredBtnId === 'btn-item-based-recommendations') {
-        alert('Get item based recommendations')
+        alert('NOT IMPLEMENTED YET - GET ITEM BASED')
         // Item based ska BARA använda EUCLIDEIAN
         const body = Object.fromEntries(new FormData(form))
 
@@ -37,6 +34,9 @@ form.addEventListener('submit', async (event) => {
         console.log(body)
         const data = await getRecommendations(body, 'item-based')
         renderRecommendedMovies(resultDiv, data)
+    }
+    } catch (error) {
+        console.error('Something went wrong...' + error.message)
     }
 })
 
