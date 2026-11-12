@@ -1,7 +1,7 @@
 export async function getUsers() {
     const res = await fetch('/api/users', {
         method: 'GET',
-        'Content-Type': 'application/json'
+        headers: {'Content-Type': 'application/json'}
     })
 
     const data = await res.json()
@@ -9,7 +9,18 @@ export async function getUsers() {
 
 }
 
-export async function getRecommendations(settings) {
+export async function getRecommendations(body, path) {
+    const res = await fetch(`/api/recommendations/${path}`, {
+        method: 'PUT',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(body)
+        })
+        console.log('Fetch sent!')
 
+    if (!res.ok) {
+        throw new Error('Failed to fetch recommendations')
+    } else if (res.ok) {
+        return await res.json()
+    }
 }
 

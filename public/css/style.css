@@ -28,7 +28,7 @@ main h1 {
   color: var(--dark);
 }
 
-form {
+.box-background-style {
   background-color: var(--light);
   padding: 20px;
   border-radius: 10px;

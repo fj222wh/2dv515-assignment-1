@@ -4,6 +4,8 @@ import { RecommendationController } from '../controllers/RecommendationControlle
 const router = Router()
 const controller = new RecommendationController()
 
-router.get('/', (req, res, next) => controller.index(req, res, next))
+router.put('/users', (req, res, next) => controller.matchingUsers(req, res, next))
+router.put('/movies', (req, res, next) => controller.recommendedMovies(req, res, next))
+router.put('/item-based', (req, res, next) => controller.itemBasedRecommendations(req, res, next))
 
 export default router

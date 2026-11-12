@@ -8,9 +8,31 @@ export class RecommendationController {
      * @param {*} res 
      * @param {*} next 
      */
-    index(req, res, next) {
-        const data = parseCSV('./data/movies.csv')
+    matchingUsers(req, res, next) {
+        console.log('PUT TAKEN')
 
-        res.status(200).json({data})
+        console.log(req.body)
+        const data = parseCSV('./data/movies.csv')
+        res.status(501).json({error: 'Matching users not implemented'})
     }
+
+    /**
+     * 
+     * @param {*} req 
+     * @param {*} res 
+     * @param {*} next 
+     */
+    recommendedMovies(req, res, next) {
+        console.log('PUT TAKEN')
+
+        console.log(req.body)
+        const data = parseCSV('./data/movies.csv')
+        res.status(501).json({error: 'Recommended movies not implemented'})
+    }
+
+    itemBasedRecommendations(req, res, next) {
+        res.status(501).json({error: 'Item based is not impelemnted yet'})
+    }
+
+
 }

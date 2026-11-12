@@ -16,22 +16,27 @@ form.addEventListener('submit', async (event) => {
     
     if (triggeredBtnId === 'btn-match-users') {
         alert('Get matching users')
-        const data = await getRecommendations()
+        const body = Object.fromEntries(new FormData(form))
+        console.log(body)
+        const data = await getRecommendations(body, 'users')
+        console.log('The data I got')
+        console.log(data)
         renderResult(resultDiv, data)
     } else if (triggeredBtnId === 'btn-recommend-movies') {
         alert('Get recommended movies')
-        const data = await getRecommendations()
+        const body = Object.fromEntries(new FormData(form))
+        const data = await getRecommendations(body, 'movies')
         renderResult(resultDiv, data)
     } else if (triggeredBtnId === 'btn-item-based-recommendations') {
         alert('Get item based recommendations')
         const similarity = 'euclidean'
         // Item based ska BARA använda EUCLIDEIAN
-        const data = await getRecommendations()
+        const body = Object.fromEntries(new FormData(form))
+        const data = await getRecommendations(body, 'item-based')
         renderResult(resultDiv, data)
     }
 })
 
 // Users ska renderas i början när applikationen startar
 const userData = await getUsers()
-console.log(userData)
 renderUsers(userList, userData)

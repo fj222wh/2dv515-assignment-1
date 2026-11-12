@@ -1,12 +1,31 @@
 /**
  * Updates the result div
- * @param {*} element 
- * @param {*} data 
+ * @param {HTMLElement} element 
+ * @param {Object} data 
  */
 export function renderResult(element, data) {
+    clearContent(element)
 
+    element.classList.add('box-background-style')
+
+    const p = document.createElement('p')
+    p.textContent = 'The results:'
+    element.append(p)
+
+    const keys = Object.keys(data)
+    console.log('the keys')
+    console.log(keys)
 }
 
+
+
+/**
+ * 
+ * @param {HTMLElement} element 
+ */
+export function clearContent(element) {
+    element.replaceChildren()
+}
 /**
  * Renders the users in the select-list
  * @param {HTMLElement} list 
