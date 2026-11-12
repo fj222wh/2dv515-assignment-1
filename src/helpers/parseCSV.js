@@ -17,7 +17,7 @@ export function parseCSV(path) {
     const headers = splitted[0].split(';')
 
     const data = []
-    // Loopa hela arrayen, förutom 
+    // Loopa hela arrayen, förutom
     for(let i = 1; i < splitted.length; i++) {
 
         const row = splitted[i].split(';')
@@ -31,4 +31,8 @@ export function parseCSV(path) {
     }
 
     return data
+}
+
+export function getUsers() {
+    return parseCSV('./data/users.csv')
 }

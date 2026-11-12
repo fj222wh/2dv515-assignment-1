@@ -7,11 +7,13 @@
 
 
 /**
- * Calculating recommendation values based of pearson
- *
- * @param {Object} data The data
+ * 
+ * @param {*} obj1 
+ * @param {*} obj2 
  */
-export function euclidean(data) {
+export function euclideanDistance(obj1, obj2) {
+    console.log('Hello from euclidean distance')
+
 
 }
 
@@ -20,6 +22,7 @@ export function euclidean(data) {
  *
  * @param {Object} data The data
  */
-export function pearson(data) {
+export function pearsonDistance(data) {
+    console.log('hello from pearson distance')
 
 }

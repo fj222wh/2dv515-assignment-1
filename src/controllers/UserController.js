@@ -1,11 +1,4 @@
-/**
- * Algorithms for recommendations
- *
- * @version 1.0.0
- * @author Filippa Johansson
- */
-
-import { parseCSV } from "../helpers/parseCSV.js"
+import { getUsers } from "../helpers/parseCSV.js"
 
 export class UserController {
 
@@ -15,7 +8,7 @@ export class UserController {
      * @param {Object} res The response object
      */
     index(req, res) {
-        const users = parseCSV('./data/users.csv')
+        const users = getUsers()
         res.status(200).json({users})
     }
 }
