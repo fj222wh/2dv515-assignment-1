@@ -1,3 +1,10 @@
+/**
+ * Helper to parse the CSV-file
+ *
+ * @version 1.0.0
+ * @author Filippa Johansson
+ */
+
 import { readFileSync } from "node:fs";
 
 

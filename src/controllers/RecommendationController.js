@@ -2,36 +2,42 @@ import { parseCSV } from "../helpers/parseCSV.js"
 
 export class RecommendationController {
 
-    /**
-     * 
-     * @param {*} req 
-     * @param {*} res 
-     * @param {*} next 
-     */
-    matchingUsers(req, res, next) {
-        console.log('PUT TAKEN')
 
+    /**
+     * Finds the most matching user compared to a selected user
+     *
+     * @param {Object} req The request object
+     * @param {Object} res The response object
+     */
+    matchingUsers(req, res) {
+        console.log('PUT sent to /users')
         console.log(req.body)
         const data = parseCSV('./data/movies.csv')
-        res.status(501).json({error: 'Matching users not implemented'})
+        res.status(200).json({error: 'Matching users not implemented'})
     }
 
     /**
-     * 
-     * @param {*} req 
-     * @param {*} res 
-     * @param {*} next 
+     * Returns movie recommendations based of a user
+     *
+     * @param {Object} req The request object
+     * @param {Object} res The response object
      */
-    recommendedMovies(req, res, next) {
-        console.log('PUT TAKEN')
-
+    recommendedMovies(req, res) {
+        console.log('PUT sent to /movies')
         console.log(req.body)
         const data = parseCSV('./data/movies.csv')
-        res.status(501).json({error: 'Recommended movies not implemented'})
+        res.status(200).json({error: 'Recommended movies not implemented'})
     }
 
-    itemBasedRecommendations(req, res, next) {
-        res.status(501).json({error: 'Item based is not impelemnted yet'})
+    /**
+     * Returns item based recommendations based of a user
+     *
+     * @param {Object} req The request object
+     * @param {Object} res The response object
+     */
+    itemBasedRecommendations(req, res) {
+        console.log('PUT sent to /item-based')
+        res.status(200).json({error: 'Item based is not impelemnted yet'})
     }
 
 

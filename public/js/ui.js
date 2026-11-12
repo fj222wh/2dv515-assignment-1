@@ -1,7 +1,8 @@
 /**
  * Updates the result div
- * @param {HTMLElement} element 
- * @param {Object} data 
+ *
+ * @param {HTMLElement} element The HTML-element where the results are shown
+ * @param {Object} data The data to be presented
  */
 export function renderResult(element, data) {
     clearContent(element)
@@ -20,22 +21,23 @@ export function renderResult(element, data) {
 
 
 /**
- * 
- * @param {HTMLElement} element 
+ * Clears a container of elements
+ *
+ * @param {HTMLElement} element A parent elemnt
  */
 export function clearContent(element) {
     element.replaceChildren()
 }
 /**
  * Renders the users in the select-list
- * @param {HTMLElement} list 
- * @param {Array} data 
+ * @param {HTMLElement} selectList The selection list
+ * @param {Array} users The user data
  */
-export function renderUsers(list, data) {
-    data.forEach(user => {
+export function renderUsers(selectList, users) {
+    users.forEach(user => {
         const opt = document.createElement('option')
         opt.setAttribute('value', user.UserId)
         opt.textContent = `${user.UserId} : ${user.Name}`
-        list.append(opt)
+        selectList.append(opt)
     });
 }

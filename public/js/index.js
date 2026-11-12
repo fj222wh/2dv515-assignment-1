@@ -1,14 +1,11 @@
 import { renderUsers } from "./ui.js"
 import { getRecommendations, getUsers } from "./api.js"
 import { renderResult } from "./ui.js"
-// The form-selections
 
 const userList = document.getElementById('user')
 const form = document.getElementById('form')
 const resultDiv = document.getElementById('result-div')
 
-// Evenlisteners
-// Skriv generell funktion som skapar och uppdaterar UI utifrån resultatet från getRecomendationsFunction()
 form.addEventListener('submit', async (event) => {
     event.preventDefault()
 
@@ -17,10 +14,7 @@ form.addEventListener('submit', async (event) => {
     if (triggeredBtnId === 'btn-match-users') {
         alert('Get matching users')
         const body = Object.fromEntries(new FormData(form))
-        console.log(body)
         const data = await getRecommendations(body, 'users')
-        console.log('The data I got')
-        console.log(data)
         renderResult(resultDiv, data)
     } else if (triggeredBtnId === 'btn-recommend-movies') {
         alert('Get recommended movies')
@@ -29,9 +23,15 @@ form.addEventListener('submit', async (event) => {
         renderResult(resultDiv, data)
     } else if (triggeredBtnId === 'btn-item-based-recommendations') {
         alert('Get item based recommendations')
-        const similarity = 'euclidean'
         // Item based ska BARA använda EUCLIDEIAN
         const body = Object.fromEntries(new FormData(form))
+
+        if (body.similarity != 'euclidean') {
+            alert('FYI: This algorithm can only use euclidean')
+        }
+        body.similarity = 'euclidean'
+
+        console.log(body)
         const data = await getRecommendations(body, 'item-based')
         renderResult(resultDiv, data)
     }
