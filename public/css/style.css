@@ -61,3 +61,28 @@ hr {
   border: 2px solid var(--secondary-darker);
   border-radius: 10px;
 }
+
+
+table {
+  margin-top: 1em;
+  width: 100%;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+}
+
+th {
+    background-color: var(--secondary-darker-darker);
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+
+td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+}
+
+tr:hover {
+    background-color: var(--secondary-lighter);
+}

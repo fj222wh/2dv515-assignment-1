@@ -4,7 +4,7 @@
  * @param {HTMLElement} element The HTML-element where the results are shown
  * @param {Object} data The data to be presented
  */
-export function renderResult(element, data) {
+export function renderRecommendedMovies(element, data) {
     clearContent(element)
 
     element.classList.add('box-background-style')
@@ -12,10 +12,49 @@ export function renderResult(element, data) {
     const p = document.createElement('p')
     p.textContent = 'The results:'
     element.append(p)
+}
 
-    const keys = Object.keys(data)
-    console.log('the keys')
-    console.log(keys)
+export function renderMatchingUsers(element, data) {
+    clearContent(element)
+
+    element.classList.add('box-background-style')
+
+    const h2 = document.createElement('h2')
+    h2.textContent = 'Top matching users:'
+    element.append(h2)
+
+    const table = document.createElement('table')
+    element.append(table)
+    const thead = document.createElement('thead')
+    table.append(thead)
+    const tr = document.createElement('tr')
+    thead.append(tr)
+    const thName = document.createElement('th')
+    thName.textContent = 'Name'
+    const thId = document.createElement('th')
+    thId.textContent = 'ID'
+    const thScore = document.createElement('th')
+    thScore.textContent = 'Score'
+    tr.append(thName, thId, thScore)
+
+    // Loopa för varje user
+    data.data.forEach(user => {
+        console.log(user)
+        const tr = document.createElement('tr')
+
+        const td1 = document.createElement('td')
+        td1.textContent = user.name
+        const td2 = document.createElement('td')
+        td2.textContent = user.userId
+        const td3 = document.createElement('td')
+        td3.textContent = user.similarityScore
+
+        tr.append(td1, td2, td3)
+        table.append(tr)
+    })
+
+
+
 }
 
 

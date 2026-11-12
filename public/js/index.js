@@ -1,6 +1,6 @@
-import { renderUsers } from "./ui.js"
+import { renderMatchingUsers, renderUsers } from "./ui.js"
 import { getRecommendations, getUsers } from "./api.js"
-import { renderResult } from "./ui.js"
+import { renderRecommendedMovies } from "./ui.js"
 
 const userList = document.getElementById('user')
 const form = document.getElementById('form')
@@ -15,12 +15,15 @@ form.addEventListener('submit', async (event) => {
         alert('Get matching users')
         const body = Object.fromEntries(new FormData(form))
         const data = await getRecommendations(body, 'users')
-        renderResult(resultDiv, data)
+
+        console.log('Data we got after finding matching users...')
+        console.log(data)
+        renderMatchingUsers(resultDiv, data)
     } else if (triggeredBtnId === 'btn-recommend-movies') {
         alert('Get recommended movies')
         const body = Object.fromEntries(new FormData(form))
         const data = await getRecommendations(body, 'movies')
-        renderResult(resultDiv, data)
+        renderRecommendedMovies(resultDiv, data)
     } else if (triggeredBtnId === 'btn-item-based-recommendations') {
         alert('Get item based recommendations')
         // Item based ska BARA använda EUCLIDEIAN
@@ -33,7 +36,7 @@ form.addEventListener('submit', async (event) => {
 
         console.log(body)
         const data = await getRecommendations(body, 'item-based')
-        renderResult(resultDiv, data)
+        renderRecommendedMovies(resultDiv, data)
     }
 })
 

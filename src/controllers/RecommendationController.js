@@ -11,55 +11,59 @@ export class RecommendationController {
      * @param {Object} res The response object
      */
     matchingUsers(req, res) {
-        // Välj metod, euclidean/pearson
-        // Hitta de användare som är mest lik en själv
-        // Skicka tillbaka det
-        // Välj antal resultat
-
-        const similarity_method = req.body.similarity
-        const selected_userId = req.body.user
-        const users = getUsers()
-
-        console.log('Method: ' + similarity_method)
-        console.log('Selected user: ' + selected_userId)
-        console.log('Users: ')
-        console.log(users)
+        const users = getUsers() // All users
+        const similarity_method = req.body.similarity // Algorithm
+        const nOfResults = req.body.results
+        const selected_userId = req.body.user // The selected user
+        const selectedUser = users.find(user => user.UserId === selected_userId)
         
-        this.#calculateSimilarity(similarity_method, selected_userId, users)
+        let similarityData = this.#calculateSimilarity(similarity_method, selectedUser, users)
+        console.log(similarityData)
+    
+        // Splice beroende på hur många resultat vi vill ha
+        if (nOfResults < similarityData.length) {
+            similarityData = similarityData.slice(0, nOfResults)
+        }
 
-        const data = parseCSV('./data/movies.csv')
-        res.status(200).json({error: 'Matching users not implemented'})
+        res.status(200).json({data: similarityData})
     }
 
     /**
      * Finds the similarity score
-     * @param {Function} method
-     * @param {Object} selected_userId
-     * @param {Array} users
+     * @param {Function} algorithm The similarity algorithm used
+     * @param {Object} selected_userId The selected user
+     * @param {Array} users List of all users
      */
-    #calculateSimilarity(method, selected_userId, users) {
+    #calculateSimilarity(algorithm, selected_userId, users) {
         // Remove the selected user, we don't want to compare similarity with ourselves
         users = users.filter(user => user.UserId !== selected_userId)
         
         let similarityMethod
 
-        if(method === 'euclidean') {
+        if(algorithm === 'euclidean') {
             similarityMethod = euclideanDistance
-        } else if (method === 'pearson') {
+        } else if (algorithm === 'pearson') {
             similarityMethod = pearsonDistance
         }
 
-        const similarity_values = []
+        const similarityScores = []
         users.forEach((user) => {
             const object = {
+                name: user.Name,
                 userId: user.UserId,
-                similarity_value: similarityMethod(selected_userId, user)
+                similarityScore: similarityMethod(selected_userId, user)
             }
 
-            similarity_values.push(object)
+            similarityScores.push(object)
         })
 
-        return similarity_values
+        similarityScores.sort(
+            (a, b) => b.similarityScore - a.similarityScore
+        )
+
+        // console.log('sorted data')
+        // console.log(similarityScores)
+        return similarityScores
     }
 
     /**

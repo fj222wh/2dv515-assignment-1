@@ -13,7 +13,7 @@
  */
 export function euclideanDistance(user1, user2) {
     console.log('Hello from euclidean distance')
-    return 2
+    return 2 * Math.random(2).toFixed(2)
 
 
 }
@@ -25,6 +25,6 @@ export function euclideanDistance(user1, user2) {
  */
 export function pearsonDistance(user1, user2) {
     console.log('hello from pearson distance')
-    return 1
+    return 2 * Math.random(2).toFixed(2)
 
 }
