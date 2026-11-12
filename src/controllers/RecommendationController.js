@@ -1,4 +1,4 @@
-import { parseCSV } from "../helpers/parseCSV.js"
+import { parseCSV, getUsers } from "../helpers/parseCSV.js"
 import { euclideanDistance, pearsonDistance } from "../helpers/algorithms.js"
 
 export class RecommendationController {
@@ -17,23 +17,29 @@ export class RecommendationController {
         // Välj antal resultat
 
         const similarity_method = req.body.similarity
-        const selected_user = req.body.user
-        
-        // this.#similarityDistance(similarity_method, selected_user, getUsers)
+        const selected_userId = req.body.user
+        const users = getUsers()
 
-        console.log('PUT sent to /users')
-        console.log(req.body)
+        console.log('Method: ' + similarity_method)
+        console.log('Selected user: ' + selected_userId)
+        console.log('Users: ')
+        console.log(users)
+        
+        this.#calculateSimilarity(similarity_method, selected_userId, users)
+
         const data = parseCSV('./data/movies.csv')
         res.status(200).json({error: 'Matching users not implemented'})
     }
 
     /**
-     * Handles calculating the similarity distance
-     * @param {*} method 
-     * @param {*} userData 
+     * Finds the similarity score
+     * @param {Function} method
+     * @param {Object} selected_userId
+     * @param {Array} users
      */
-    #similarityDistance(method, selected_user, users) {
-        // Remove yourself from the other users
+    #calculateSimilarity(method, selected_userId, users) {
+        // Remove the selected user, we don't want to compare similarity with ourselves
+        users = users.filter(user => user.UserId !== selected_userId)
         
         let similarityMethod
 
@@ -45,18 +51,15 @@ export class RecommendationController {
 
         const similarity_values = []
         users.forEach((user) => {
-
             const object = {
                 userId: user.UserId,
-                similarity_value: similarityMethod(selected_user, user)
+                similarity_value: similarityMethod(selected_userId, user)
             }
 
             similarity_values.push(object)
         })
 
-        // Hitta den med högst värde?
-
-
+        return similarity_values
     }
 
     /**

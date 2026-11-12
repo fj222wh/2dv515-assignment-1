@@ -11,8 +11,9 @@
  * @param {*} obj1 
  * @param {*} obj2 
  */
-export function euclideanDistance(obj1, obj2) {
+export function euclideanDistance(user1, user2) {
     console.log('Hello from euclidean distance')
+    return 2
 
 
 }
@@ -22,7 +23,8 @@ export function euclideanDistance(obj1, obj2) {
  *
  * @param {Object} data The data
  */
-export function pearsonDistance(data) {
+export function pearsonDistance(user1, user2) {
     console.log('hello from pearson distance')
+    return 1
 
 }
