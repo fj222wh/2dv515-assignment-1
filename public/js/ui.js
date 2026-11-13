@@ -8,6 +8,13 @@ export function renderTable(element, data, h2Text, tableHeaders) {
 
   element.classList.add('box-background-style')
 
+  if (data.data.length === 0) {
+    const warning = document.createElement('p')
+    warning.textContent = 'No matches found, the selected user have already watched all movies!'
+    element.append(warning)
+    return
+  }
+
   const h2 = document.createElement('h2')
   h2.textContent = h2Text
   element.append(h2)

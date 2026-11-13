@@ -1,5 +1,5 @@
-import { getUsers, getRatings } from '../helpers/parseCSV.js'
-import { euclideanDistance, pearsonDistance, weightedScore } from '../helpers/algorithms.js'
+import { getUsers, getRatings, getMovies } from '../helpers/parseCSV.js'
+import { euclideanDistance, pearsonDistance, getRecommendationsByWeightedScore } from '../helpers/algorithms.js'
 
 export class RecommendationController {
   /**
@@ -107,11 +107,11 @@ export class RecommendationController {
     const nOfResults = req.body.results
     const similarityScores = this.#calculateSimilarity(req)
     const ratings = getRatings()
+    const movies = getMovies()
 
     // The movies the selected user has seen
     const seenMovies = new Set()
     ratings.forEach((rating) => {
-      console.log(rating)
       if (Number(rating.UserId) === targetUserId) {
         seenMovies.add(Number(rating.MovieId))
       }
@@ -119,47 +119,25 @@ export class RecommendationController {
 
     // The movies the user hasn't seen
     const unseenMovies = ratings
-      .map((user) => {
-        console.log(user)
+      .map((rating) => {
         return {
-          userId: Number(user.UserId),
-          movieId: Number(user.MovieId),
-          rating: Number(user.Rating),
-          similarity: similarityScores.find((s) => Number(s.userId) === Number(user.UserId))
+          userId: Number(rating.UserId),
+          movieId: Number(rating.MovieId),
+          rating: Number(rating.Rating),
+          similarity: similarityScores.find((s) => Number(s.userId) === Number(rating.UserId))
             ?.similarityScore,
         }
       })
       .filter((movie) => movie.userId !== targetUserId && !seenMovies.has(movie.movieId))
-
-    console.log('SEEN MOVIES')
-    console.log(seenMovies)
-
-    console.log('------------')
-    console.log(unseenMovies)
+    
     // Calcualte weighted score
-    const weightedScores = weightedScore(unseenMovies)
+    let recommendations = getRecommendationsByWeightedScore(unseenMovies)
+  
+    if (nOfResults < recommendations.length) {
+        recommendations = [...recommendations].slice(0, nOfResults)
+    }
 
-    // Hitta filmerna med högst weighted scores
-    // Beroende på hur många filmer som ska returneras, slice/splice
-
-    // Mappa filmerna till rätt namn
-    // Returnera objekt med information till frontend
-    // const recommendedMovies = []
-    // const recommendation = {
-    //     movie_title: 'Title',
-    //     id: 'id',
-
-    // }
-
-    const recommendedMovies = [
-      {
-        movieTitle: 'Title 1',
-        movieId: 2,
-        score: 0.23423,
-      },
-    ]
-
-    res.status(200).json({ data: recommendedMovies })
+    res.status(200).json({ data: recommendations })
   }
 
   /**

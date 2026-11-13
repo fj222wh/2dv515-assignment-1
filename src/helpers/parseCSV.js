@@ -36,6 +36,10 @@ export function getRatings() {
   return parseCSV('./data/ratings.csv')
 }
 
+export function getMovies() {
+    return parseCSV('./data/movies.csv')
+}
+
 export function findUser(id) {
   const users = getUsers()
   const selectedUser = users.find((user) => user.UserId === id)

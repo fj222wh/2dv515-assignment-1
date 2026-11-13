@@ -5,11 +5,56 @@
  * @author Filippa Johansson
  */
 
+import { getMovies } from "./parseCSV.js"
+
 /**
- * Caclulates the weighted score for a movie
+ * 
+ * @param {Array} movieData 
+ * @returns 
  */
-export function weightedScore(similarity, rating) {
-  return similarity * rating
+export function getRecommendationsByWeightedScore(movieData) {
+    // Calculate the weighed score
+    movieData.forEach(entry => {
+        const similarity = entry.similarity
+        const rating = entry.rating
+        const weightScore = similarity * rating
+        entry.ws = weightScore
+    })
+
+    console.log(movieData)
+    const movieMap = new Map()
+
+    movieData.forEach(rating => {
+        const current = movieMap.get(rating.movieId) || {
+            ws: 0,
+            similarity: 0
+        }
+
+        movieMap.set(rating.movieId, {
+            ws: current.ws + rating.ws,
+            similarity: current.similarity + rating.similarity
+        })
+    })
+
+    const movies = getMovies()
+    const recommendations = []
+
+    console.log(movies)
+
+    for (const [movieId, {ws, similarity}] of movieMap) {
+        const movie = movies.find(m => Number(m.MovieId) === movieId)
+
+        const recommendation = {
+            movieId,
+            movieTitle: movie?.Title,
+            score: Number(ws / similarity).toFixed(4),
+            year: movie.Year
+        }
+
+        recommendations.push(recommendation)
+    }
+
+  return recommendations.sort((a, b) => b.score - a.score)
 }
 
 /**
