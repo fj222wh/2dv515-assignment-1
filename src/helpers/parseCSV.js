@@ -37,7 +37,7 @@ export function getRatings() {
 }
 
 export function getMovies() {
-    return parseCSV('./data/movies.csv')
+  return parseCSV('./data/movies.csv')
 }
 
 export function findUser(id) {

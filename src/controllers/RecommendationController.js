@@ -1,5 +1,6 @@
-import { getUsers, getRatings, getMovies } from '../helpers/parseCSV.js'
-import { euclideanDistance, pearsonDistance, getRecommendationsByWeightedScore } from '../helpers/algorithms.js'
+import { getUsers, getRatings } from '../helpers/parseCSV.js'
+import { euclideanDistance, pearsonDistance } from '../helpers/algorithms.js'
+import { getMovies } from '../helpers/parseCSV.js'
 
 export class RecommendationController {
   /**
@@ -107,7 +108,6 @@ export class RecommendationController {
     const nOfResults = req.body.results
     const similarityScores = this.#calculateSimilarity(req)
     const ratings = getRatings()
-    const movies = getMovies()
 
     // The movies the selected user has seen
     const seenMovies = new Set()
@@ -129,15 +129,61 @@ export class RecommendationController {
         }
       })
       .filter((movie) => movie.userId !== targetUserId && !seenMovies.has(movie.movieId))
-    
+
     // Calcualte weighted score
-    let recommendations = getRecommendationsByWeightedScore(unseenMovies)
-  
+    let recommendations = this.#getRecommendationsByWeightedScore(unseenMovies)
+
     if (nOfResults < recommendations.length) {
-        recommendations = [...recommendations].slice(0, nOfResults)
+      recommendations = [...recommendations].slice(0, nOfResults)
     }
 
     res.status(200).json({ data: recommendations })
+  }
+
+  /**
+   *
+   * @param {Array} movieData
+   * @returns
+   */
+  #getRecommendationsByWeightedScore(movieData) {
+    // Calculate the weighed score
+    movieData.forEach((entry) => {
+      const similarity = entry.similarity
+      const rating = entry.rating
+      const weightScore = similarity * rating
+      entry.ws = weightScore
+    })
+
+    const movieMap = new Map()
+
+    movieData.forEach((rating) => {
+      const current = movieMap.get(rating.movieId) || {
+        ws: 0,
+        similarity: 0,
+      }
+
+      movieMap.set(rating.movieId, {
+        ws: current.ws + rating.ws,
+        similarity: current.similarity + rating.similarity,
+      })
+    })
+
+    const movies = getMovies()
+    const recommendations = []
+
+    for (const [movieId, { ws, similarity }] of movieMap) {
+      const movie = movies.find((m) => Number(m.MovieId) === movieId)
+
+      const recommendation = {
+        movieId,
+        movieTitle: movie?.Title,
+        score: Number(ws / similarity).toFixed(4),
+      }
+
+      recommendations.push(recommendation)
+    }
+
+    return recommendations.sort((a, b) => b.score - a.score)
   }
 
   /**

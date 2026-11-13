@@ -5,58 +5,6 @@
  * @author Filippa Johansson
  */
 
-import { getMovies } from "./parseCSV.js"
-
-/**
- * 
- * @param {Array} movieData 
- * @returns 
- */
-export function getRecommendationsByWeightedScore(movieData) {
-    // Calculate the weighed score
-    movieData.forEach(entry => {
-        const similarity = entry.similarity
-        const rating = entry.rating
-        const weightScore = similarity * rating
-        entry.ws = weightScore
-    })
-
-    console.log(movieData)
-    const movieMap = new Map()
-
-    movieData.forEach(rating => {
-        const current = movieMap.get(rating.movieId) || {
-            ws: 0,
-            similarity: 0
-        }
-
-        movieMap.set(rating.movieId, {
-            ws: current.ws + rating.ws,
-            similarity: current.similarity + rating.similarity
-        })
-    })
-
-    const movies = getMovies()
-    const recommendations = []
-
-    console.log(movies)
-
-    for (const [movieId, {ws, similarity}] of movieMap) {
-        const movie = movies.find(m => Number(m.MovieId) === movieId)
-
-        const recommendation = {
-            movieId,
-            movieTitle: movie?.Title,
-            score: Number(ws / similarity).toFixed(4),
-            year: movie.Year
-        }
-
-        recommendations.push(recommendation)
-    }
-
-  return recommendations.sort((a, b) => b.score - a.score)
-}
-
 /**
  * Calculate the euclidean distance, returns a similarity score
  *
@@ -70,7 +18,7 @@ export function euclideanDistance(user1, user2) {
   user1.ratings.forEach((rating1) => {
     user2.ratings.forEach((rating2) => {
       // If they have rated the same movie, we want to check how similar they rated the same movie
-      if (rating1.MovieId === rating2.MovieId) {
+      if (Number(rating1.MovieId) === Number(rating2.MovieId)) {
         similarity += (rating1.Rating - rating2.Rating) ** 2
         matchingCount += 1
       }
@@ -90,9 +38,45 @@ export function euclideanDistance(user1, user2) {
  * @param {Object} data The data
  */
 export function pearsonDistance(user1, user2) {
-  // Compare with pearson distance
-  console.log(user1)
-  console.log(user2)
-  console.log('hello from pearson distance')
-  return 2 * Math.random(2)
+  let sum1 = 0
+  let sum2 = 0
+  let sum1sq = 0
+  let sum2sq = 0
+  let pSum = 0
+
+  let matchingCount = 0
+
+  user1.ratings.forEach((rating1) => {
+    console.log(rating1)
+    rating1.Rating = Number(rating1.Rating)
+    user2.ratings.forEach((rating2) => {
+        rating2.Rating = Number(rating2.Rating)
+        console.log('---------------')
+        console.log(rating2)
+      // If they have watched the same movie
+      if (Number(rating1.MovieId) === Number(rating2.MovieId)) {
+        sum1 += rating1.Rating
+        sum2 += rating2.Rating
+        sum1sq += rating1.Rating ** 2
+        sum2sq += rating2.Rating ** 2
+        pSum += rating1.Rating * rating2.Rating // product of ratings
+        matchingCount += 1
+      }
+    })
+  })
+
+  if (matchingCount === 0) {
+    return 0
+  } else {
+    const num = pSum - (sum1 * sum2) / matchingCount
+    const den = Math.sqrt(
+      (sum1sq - sum1 ** 2 / matchingCount) * (sum2sq - sum2 ** 2 / matchingCount),
+    )
+
+    if (den === 0) {
+        return 0
+    }
+
+    return num / den
+  }
 }
