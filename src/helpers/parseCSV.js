@@ -31,3 +31,13 @@ export function parseCSV(path) {
 export function getUsers() {
   return parseCSV('./data/users.csv')
 }
+
+export function getRatings() {
+  return parseCSV('./data/ratings.csv')
+}
+
+export function findUser(id) {
+  const users = getUsers()
+  const selectedUser = users.find((user) => user.UserId === id)
+  return selectedUser
+}

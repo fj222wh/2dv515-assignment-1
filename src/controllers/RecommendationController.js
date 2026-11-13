@@ -1,4 +1,4 @@
-import { parseCSV, getUsers } from '../helpers/parseCSV.js'
+import { parseCSV, getUsers, findUser, getRatings } from '../helpers/parseCSV.js'
 import { euclideanDistance, pearsonDistance } from '../helpers/algorithms.js'
 
 export class RecommendationController {
@@ -12,7 +12,6 @@ export class RecommendationController {
     try {
       const nOfResults = req.body.results
       let similarityData = this.#calculateSimilarity(req)
-      console.log(similarityData)
 
       // Splice beroende på hur många resultat vi vill ha
       if (nOfResults < similarityData.length) {
@@ -25,6 +24,11 @@ export class RecommendationController {
     }
   }
 
+  /**
+   * Error handling - checking the request object
+   *
+   * @param {Object} req The request object
+   */
   #checkBody(req) {
     if (!req.body.user) {
       throw new Error('A user have to be selected')
@@ -48,13 +52,30 @@ export class RecommendationController {
   #calculateSimilarity(req) {
     this.#checkBody(req)
     // Variables
-    let users = getUsers() // All users
+    const users = getUsers() // All users
+    let ratings = getRatings()
+
+    let usersWithRatings = users.map((user) => {
+      return {
+        ...user,
+        ratings: ratings
+          .filter((rating) => rating.UserId === user.UserId)
+          .map((rating) => ({
+            MovieId: rating.MovieId,
+            Rating: Number(rating.Rating),
+          })),
+      }
+    })
+
+    console.log('THE USER WITH ITS RATINGS')
+    console.log(usersWithRatings)
+
     const algorithm = req.body.similarity // Algorithm
     const selected_userId = req.body.user // The selected user
-    const selectedUser = users.find((user) => user.UserId === selected_userId)
+    const selectedUser = usersWithRatings.find((user) => user.UserId === selected_userId)
 
     // Remove the selected user, we don't want to compare similarity with ourselves
-    users = users.filter((user) => user.UserId !== selected_userId)
+    usersWithRatings = usersWithRatings.filter((user) => user.UserId !== selected_userId)
 
     let similarityMethod
     if (algorithm === 'euclidean') {
@@ -64,11 +85,13 @@ export class RecommendationController {
     }
 
     const similarityScores = []
-    users.forEach((user) => {
+    usersWithRatings.forEach((user) => {
+      const score = similarityMethod(selectedUser, user)
+      console.log(score)
       const object = {
         name: user.Name,
         userId: user.UserId,
-        similarityScore: similarityMethod(selectedUser, user),
+        similarityScore: score,
       }
 
       similarityScores.push(object)
@@ -87,22 +110,51 @@ export class RecommendationController {
    */
   recommendedMovies(req, res) {
     const nOfResults = req.body.results
-    let similarityData = this.#calculateSimilarity(req)
 
-    const movies = parseCSV('./data/movies.csv')
+    const mostSimilarUser = this.#calculateSimilarity(req)[0] // Baserat på vilken användare som är mest lik
+    console.log(mostSimilarUser)
 
-    // Baserat på vilken användare som är mest lik
-    // MostSimilarUser[0], hämta id
+    const movies = parseCSV('./data/ratings.csv') //  All movies
+
+    const ratings = parseCSV('./data/ratings.csv')
+
+    const mostSimilarUserRatings = [...ratings].filter(
+      (movie) => movie.UserId === mostSimilarUser.userId || movie.UserId === req.body.user,
+    )
+
+    console.log('Selected user: ' + req.body.user)
+    console.log('Most similar user: ' + mostSimilarUser.userId)
+    console.log(mostSimilarUserRatings)
+    const seen = new Set()
+    mostSimilarUserRatings
+      .filter((movie) => movie.UserId === req.body.user)
+      .map((movie) => movie.MovieId)
+      .forEach((movieId) => seen.add(movieId))
+    console.log(seen)
+
+    const unseenMovies = ratings.filter(
+      (movie) => movie.UserId === mostSimilarUser.userId && !seen.has(movie.MovieId),
+    )
+    console.log('Unseen movies!!')
+    console.log(unseenMovies)
+    // const selectedUser = findUser(req.body.user)
+
+    // console.log('selected user')
+    // console.log(selectedUser)
+
+    // console.log('2 RATINGS')
+    // console.log(mostSimilarUserRatings)
+
     // Hämta ochs sortera filmer som den här användaren gillar
     // Hitta filmerna som användare med id x gillar, jämför med de filmer som den valda användaren INTE har betygsatt
     // Skicka tillbaka de filmer som den inte har betygsatt
 
     // Splice beroende på hur många resultat vi vill ha
 
-    const recommendedMovies = []
-    if (nOfResults < recommendedMovies.length) {
-      recommendedMovies = recommendedMovies.slice(0, nOfResults)
-    }
+    // const recommendedMovies = []
+    // if (nOfResults < recommendedMovies.length) {
+    //   recommendedMovies = recommendedMovies.slice(0, nOfResults)
+    // }
 
     res.status(200).json({ error: 'Recommended movies not implemented' })
   }
