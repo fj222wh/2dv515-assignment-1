@@ -1,4 +1,4 @@
-import { getUsers, getUserRatings, getRatings } from '../helpers/parseCSV.js'
+import { getUsers, getRatings } from '../helpers/parseCSV.js'
 import { euclideanDistance, pearsonDistance, weightedScore } from '../helpers/algorithms.js'
 
 export class RecommendationController {
@@ -103,23 +103,41 @@ export class RecommendationController {
    * @param {Object} res The response object
    */
   recommendedMovies(req, res) {
+    const targetUserId = Number(req.body.user)
     const nOfResults = req.body.results
     const similarityScores = this.#calculateSimilarity(req)
+    const ratings = getRatings()
 
-    // Map user ratings with the similarity, remove the selected users ratings and movies the selected user already has seen
-    const userRatings = getUserRatings()
-      .filter((user) => user.UserId !== req.body.user)
+    // The movies the selected user has seen
+    const seenMovies = new Set()
+    ratings.forEach((rating) => {
+      console.log(rating)
+      if (Number(rating.UserId) === targetUserId) {
+        seenMovies.add(Number(rating.MovieId))
+      }
+    })
+
+    // The movies the user hasn't seen
+    const unseenMovies = ratings
       .map((user) => {
+        console.log(user)
         return {
-          ...user,
-          similarity: similarityScores.find((s) => s.userId === user.UserId)?.similarityScore ?? 0,
+          userId: Number(user.UserId),
+          movieId: Number(user.MovieId),
+          rating: Number(user.Rating),
+          similarity: similarityScores.find((s) => Number(s.userId) === Number(user.UserId))
+            ?.similarityScore,
         }
       })
+      .filter((movie) => movie.userId !== targetUserId && !seenMovies.has(movie.movieId))
 
-    console.log(userRatings)
+    console.log('SEEN MOVIES')
+    console.log(seenMovies)
 
+    console.log('------------')
+    console.log(unseenMovies)
     // Calcualte weighted score
-    const weightedScores = weightedScore(userRatings)
+    const weightedScores = weightedScore(unseenMovies)
 
     // Hitta filmerna med högst weighted scores
     // Beroende på hur många filmer som ska returneras, slice/splice
