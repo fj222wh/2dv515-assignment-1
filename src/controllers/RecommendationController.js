@@ -94,7 +94,6 @@ export class RecommendationController {
     })
 
     similarityScores.sort((a, b) => b.similarityScore - a.similarityScore)
-
     return similarityScores
   }
 
@@ -155,11 +154,8 @@ export class RecommendationController {
       entry.ws = weightScore
     })
 
-        movieData = movieData.filter((movie) => movie.similarity > 0)
-        console.log('After > 0')
-        console.log(movieData)
+    movieData = movieData.filter((movie) => movie.similarity > 0)
     const movieMap = new Map()
-
 
     movieData.forEach((rating) => {
       const current = movieMap.get(rating.movieId) || {

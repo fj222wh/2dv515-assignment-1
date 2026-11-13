@@ -49,7 +49,7 @@ export function pearsonDistance(user1, user2) {
   user1.ratings.forEach((rating1) => {
     rating1.Rating = Number(rating1.Rating)
     user2.ratings.forEach((rating2) => {
-        rating2.Rating = Number(rating2.Rating)
+      rating2.Rating = Number(rating2.Rating)
 
       // If they have watched the same movie
       if (Number(rating1.MovieId) === Number(rating2.MovieId)) {
@@ -72,9 +72,11 @@ export function pearsonDistance(user1, user2) {
     )
 
     if (den === 0) {
-        return 0
+      return 0
     }
 
-    return num / den
+    const result = num / den
+
+    return Number(result.toFixed(4))
   }
 }
