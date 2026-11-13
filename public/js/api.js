@@ -15,8 +15,6 @@ export async function getRecommendations(body, path) {
     body: JSON.stringify(body),
   })
 
-  console.log('Fetch sent!')
-
   if (!res.ok) {
     throw new Error('Failed to fetch recommendations')
   } else if (res.ok) {

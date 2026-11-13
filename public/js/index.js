@@ -1,4 +1,4 @@
-import { renderMatchingUsers, renderUsers } from './ui.js'
+import { renderTable, renderUsers } from './ui.js'
 import { getRecommendations, getUsers } from './api.js'
 import { renderRecommendedMovies } from './ui.js'
 
@@ -15,24 +15,23 @@ form.addEventListener('submit', async (event) => {
     if (triggeredBtnId === 'btn-match-users') {
       const body = Object.fromEntries(new FormData(form))
       const data = await getRecommendations(body, 'users')
-      renderMatchingUsers(resultDiv, data)
+      renderTable(resultDiv, data, 'Top matching users', ['Name', 'ID', 'Score'])
     } else if (triggeredBtnId === 'btn-recommend-movies') {
       const body = Object.fromEntries(new FormData(form))
       const data = await getRecommendations(body, 'movies')
-      renderRecommendedMovies(resultDiv, data)
+      console.log(data)
+      renderTable(resultDiv, data, 'Recommended movies', ['Movie', 'ID', 'Score'] )
     } else if (triggeredBtnId === 'btn-item-based-recommendations') {
       alert('NOT IMPLEMENTED YET - GET ITEM BASED')
-      // Item based ska BARA använda EUCLIDEIAN
-      const body = Object.fromEntries(new FormData(form))
+    //   // Item based ska BARA använda EUCLIDEIAN
+    //   const body = Object.fromEntries(new FormData(form))
 
-      if (body.similarity != 'euclidean') {
-        alert('FYI: This algorithm can only use euclidean')
-      }
-      body.similarity = 'euclidean'
-
-      console.log(body)
-      const data = await getRecommendations(body, 'item-based')
-      renderRecommendedMovies(resultDiv, data)
+    //   if (body.similarity != 'euclidean') {
+    //     alert('FYI: This algorithm can only use euclidean')
+    //   }
+    //   body.similarity = 'euclidean'
+    //   const data = await getRecommendations(body, 'item-based')
+    //   renderRecommendedMovies(resultDiv, data)
     }
   } catch (error) {
     console.error('Something went wrong...' + error.message)

@@ -1,5 +1,5 @@
-import { parseCSV, getUsers, findUser, getRatings } from '../helpers/parseCSV.js'
-import { euclideanDistance, pearsonDistance } from '../helpers/algorithms.js'
+import { parseCSV, getUsers, findUser, getUserRatings, getRatings } from '../helpers/parseCSV.js'
+import { euclideanDistance, pearsonDistance, weightedScore} from '../helpers/algorithms.js'
 
 export class RecommendationController {
   /**
@@ -51,7 +51,6 @@ export class RecommendationController {
    */
   #calculateSimilarity(req) {
     this.#checkBody(req)
-    // Variables
     const users = getUsers() // All users
     let ratings = getRatings()
 
@@ -66,9 +65,6 @@ export class RecommendationController {
           })),
       }
     })
-
-    console.log('THE USER WITH ITS RATINGS')
-    console.log(usersWithRatings)
 
     const algorithm = req.body.similarity // Algorithm
     const selected_userId = req.body.user // The selected user
@@ -86,12 +82,10 @@ export class RecommendationController {
 
     const similarityScores = []
     usersWithRatings.forEach((user) => {
-      const score = similarityMethod(selectedUser, user)
-      console.log(score)
       const object = {
         name: user.Name,
         userId: user.UserId,
-        similarityScore: score,
+        similarityScore: similarityMethod(selectedUser, user),
       }
 
       similarityScores.push(object)
@@ -110,55 +104,49 @@ export class RecommendationController {
    */
   recommendedMovies(req, res) {
     const nOfResults = req.body.results
+    const similarityScores = this.#calculateSimilarity(req)
+    
 
-    const mostSimilarUser = this.#calculateSimilarity(req)[0] // Baserat på vilken användare som är mest lik
-    console.log(mostSimilarUser)
+    // Map user ratings with the similarity, remove the selected users ratings and movies the selected user already has seen
+    const userRatings = getUserRatings().filter(user => user.UserId !== req.body.user).map((user) => {
+        return {
+            ...user,
+            similarity: similarityScores.find(s => s.userId === user.UserId)?.similarityScore ?? 0
+        }
+    })
 
-    const movies = parseCSV('./data/ratings.csv') //  All movies
 
-    const ratings = parseCSV('./data/ratings.csv')
 
-    const mostSimilarUserRatings = [...ratings].filter(
-      (movie) => movie.UserId === mostSimilarUser.userId || movie.UserId === req.body.user,
-    )
+    // Calcualte weighted score
+    const weightedScores = weightedScore(userRatings)
 
-    console.log('Selected user: ' + req.body.user)
-    console.log('Most similar user: ' + mostSimilarUser.userId)
-    console.log(mostSimilarUserRatings)
-    const seen = new Set()
-    mostSimilarUserRatings
-      .filter((movie) => movie.UserId === req.body.user)
-      .map((movie) => movie.MovieId)
-      .forEach((movieId) => seen.add(movieId))
-    console.log(seen)
+    // Hitta filmerna med högst weighted scores
+    // Beroende på hur många filmer som ska returneras, slice/splice
 
-    const unseenMovies = ratings.filter(
-      (movie) => movie.UserId === mostSimilarUser.userId && !seen.has(movie.MovieId),
-    )
-    console.log('Unseen movies!!')
-    console.log(unseenMovies)
-    // const selectedUser = findUser(req.body.user)
-
-    // console.log('selected user')
-    // console.log(selectedUser)
-
-    // console.log('2 RATINGS')
-    // console.log(mostSimilarUserRatings)
-
-    // Hämta ochs sortera filmer som den här användaren gillar
-    // Hitta filmerna som användare med id x gillar, jämför med de filmer som den valda användaren INTE har betygsatt
-    // Skicka tillbaka de filmer som den inte har betygsatt
-
-    // Splice beroende på hur många resultat vi vill ha
-
+    // Mappa filmerna till rätt namn
+    // Returnera objekt med information till frontend
     // const recommendedMovies = []
-    // if (nOfResults < recommendedMovies.length) {
-    //   recommendedMovies = recommendedMovies.slice(0, nOfResults)
+    // const recommendation = {
+    //     movie_title: 'Title',
+    //     id: 'id',
+
+        
     // }
 
-    res.status(200).json({ error: 'Recommended movies not implemented' })
+    const recommendedMovies = [{
+        movieTitle: 'Title 1',
+        movieId: 2,
+        score: 0.23423
+    }]
+
+    res.status(200).json({ data: recommendedMovies })
   }
 
+
+
+
+
+  
   /**
    * Returns item based recommendations based of a user
    *

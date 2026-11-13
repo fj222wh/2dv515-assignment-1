@@ -19,13 +19,13 @@ export function renderRecommendedMovies(element, data) {
  * @param {HTMLElement} element The container element
  * @param {Object} data The user data
  */
-export function renderMatchingUsers(element, data) {
+export function renderTable(element, data, h2Text, tableHeaders) {
   clearContent(element)
 
   element.classList.add('box-background-style')
 
   const h2 = document.createElement('h2')
-  h2.textContent = 'Top matching users:'
+  h2.textContent = h2Text
   element.append(h2)
 
   const table = document.createElement('table')
@@ -34,27 +34,24 @@ export function renderMatchingUsers(element, data) {
   table.append(thead)
   const tr = document.createElement('tr')
   thead.append(tr)
-  const thName = document.createElement('th')
-  thName.textContent = 'Name'
-  const thId = document.createElement('th')
-  thId.textContent = 'ID'
-  const thScore = document.createElement('th')
-  thScore.textContent = 'Score'
-  tr.append(thName, thId, thScore)
+  const th1 = document.createElement('th')
+  th1.textContent = tableHeaders[0]
+  const th2 = document.createElement('th')
+  th2.textContent = tableHeaders[1]
+  const th3 = document.createElement('th')
+  th3.textContent = tableHeaders[2]
+  tr.append(th1, th2, th3)
 
-  // Loopa för varje user
-  data.data.forEach((user) => {
-    console.log(user)
+  // Loopa för varje row i objektet
+  data.data.forEach((obj) => {
     const tr = document.createElement('tr')
+    
+    Object.values(obj).forEach((value) => {
+        const td = document.createElement('td')
+        td.textContent = value
+        tr.append(td)
+    })
 
-    const td1 = document.createElement('td')
-    td1.textContent = user.name
-    const td2 = document.createElement('td')
-    td2.textContent = user.userId
-    const td3 = document.createElement('td')
-    td3.textContent = user.similarityScore
-
-    tr.append(td1, td2, td3)
     table.append(tr)
   })
 }

@@ -5,6 +5,14 @@
  * @author Filippa Johansson
  */
 
+
+/**
+ * Caclulates the weighted score for a movie
+ */
+export function weightedScore(similarity, rating) {
+    return similarity * rating
+}
+
 /**
  * Calculate the euclidean distance, returns a similarity score
  *
@@ -13,7 +21,6 @@
  */
 export function euclideanDistance(user1, user2) {
   let similarity = 0
-
   let matchingCount = 0
 
   user1.ratings.forEach((rating1) => {
@@ -28,7 +35,6 @@ export function euclideanDistance(user1, user2) {
         // console.log(`Selected user rating:  ${rating1.Rating}`)
         // console.log(`The other user's rating: ${rating2.Rating}`)
         // console.log('-----------------------------------')
-
         similarity += (rating1.Rating - rating2.Rating) ** 2
         matchingCount += 1
       }
@@ -40,7 +46,7 @@ export function euclideanDistance(user1, user2) {
   }
   const invertedScore = 1 / (1 + similarity)
   console.log(invertedScore)
-  return invertedScore.toFixed(4)
+  return Number(invertedScore.toFixed(4))
 }
 
 /**
@@ -50,5 +56,5 @@ export function euclideanDistance(user1, user2) {
  */
 export function pearsonDistance(user1, user2) {
   console.log('hello from pearson distance')
-  return 2 * Math.random(2).toFixed(4)
+  return 2 * Math.random(2)
 }
