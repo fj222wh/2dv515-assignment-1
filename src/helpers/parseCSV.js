@@ -42,22 +42,21 @@ export function findUser(id) {
   return selectedUser
 }
 
-
 export function getUserRatings() {
-    const users = getUsers()
-    const ratings = getRatings()
+  const users = getUsers()
+  const ratings = getRatings()
 
-    const usersWithRatings = users.map((user) => {
-      return {
-        ...user,
-        ratings: ratings
-          .filter((rating) => rating.UserId === user.UserId)
-          .map((rating) => ({
-            MovieId: rating.MovieId,
-            Rating: Number(rating.Rating),
-          })),
-      }
-    })
+  const usersWithRatings = users.map((user) => {
+    return {
+      ...user,
+      ratings: ratings
+        .filter((rating) => rating.UserId === user.UserId)
+        .map((rating) => ({
+          MovieId: rating.MovieId,
+          Rating: Number(rating.Rating),
+        })),
+    }
+  })
 
-    return usersWithRatings
+  return usersWithRatings
 }

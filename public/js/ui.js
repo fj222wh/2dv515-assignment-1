@@ -1,20 +1,4 @@
 /**
- * Updates the result div
- *
- * @param {HTMLElement} element The HTML-element where the results are shown
- * @param {Object} data The data to be presented
- */
-export function renderRecommendedMovies(element, data) {
-  clearContent(element)
-
-  element.classList.add('box-background-style')
-
-  const p = document.createElement('p')
-  p.textContent = 'The results:'
-  element.append(p)
-}
-
-/**
  * Renders the matching users
  * @param {HTMLElement} element The container element
  * @param {Object} data The user data
@@ -45,11 +29,11 @@ export function renderTable(element, data, h2Text, tableHeaders) {
   // Loopa för varje row i objektet
   data.data.forEach((obj) => {
     const tr = document.createElement('tr')
-    
+
     Object.values(obj).forEach((value) => {
-        const td = document.createElement('td')
-        td.textContent = value
-        tr.append(td)
+      const td = document.createElement('td')
+      td.textContent = value
+      tr.append(td)
     })
 
     table.append(tr)

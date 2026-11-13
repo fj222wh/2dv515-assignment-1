@@ -1,5 +1,5 @@
-import { parseCSV, getUsers, findUser, getUserRatings, getRatings } from '../helpers/parseCSV.js'
-import { euclideanDistance, pearsonDistance, weightedScore} from '../helpers/algorithms.js'
+import { getUsers, getUserRatings, getRatings } from '../helpers/parseCSV.js'
+import { euclideanDistance, pearsonDistance, weightedScore } from '../helpers/algorithms.js'
 
 export class RecommendationController {
   /**
@@ -105,17 +105,18 @@ export class RecommendationController {
   recommendedMovies(req, res) {
     const nOfResults = req.body.results
     const similarityScores = this.#calculateSimilarity(req)
-    
 
     // Map user ratings with the similarity, remove the selected users ratings and movies the selected user already has seen
-    const userRatings = getUserRatings().filter(user => user.UserId !== req.body.user).map((user) => {
+    const userRatings = getUserRatings()
+      .filter((user) => user.UserId !== req.body.user)
+      .map((user) => {
         return {
-            ...user,
-            similarity: similarityScores.find(s => s.userId === user.UserId)?.similarityScore ?? 0
+          ...user,
+          similarity: similarityScores.find((s) => s.userId === user.UserId)?.similarityScore ?? 0,
         }
-    })
+      })
 
-
+    console.log(userRatings)
 
     // Calcualte weighted score
     const weightedScores = weightedScore(userRatings)
@@ -130,23 +131,19 @@ export class RecommendationController {
     //     movie_title: 'Title',
     //     id: 'id',
 
-        
     // }
 
-    const recommendedMovies = [{
+    const recommendedMovies = [
+      {
         movieTitle: 'Title 1',
         movieId: 2,
-        score: 0.23423
-    }]
+        score: 0.23423,
+      },
+    ]
 
     res.status(200).json({ data: recommendedMovies })
   }
 
-
-
-
-
-  
   /**
    * Returns item based recommendations based of a user
    *
