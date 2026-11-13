@@ -47,12 +47,10 @@ export function pearsonDistance(user1, user2) {
   let matchingCount = 0
 
   user1.ratings.forEach((rating1) => {
-    console.log(rating1)
     rating1.Rating = Number(rating1.Rating)
     user2.ratings.forEach((rating2) => {
         rating2.Rating = Number(rating2.Rating)
-        console.log('---------------')
-        console.log(rating2)
+
       // If they have watched the same movie
       if (Number(rating1.MovieId) === Number(rating2.MovieId)) {
         sum1 += rating1.Rating
