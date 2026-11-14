@@ -6,6 +6,7 @@
  */
 
 import { readFileSync } from 'node:fs'
+const PATH = process.env.CSV_PATH
 
 export function parseCSV(path) {
   const text = readFileSync(path, 'utf8')
@@ -29,15 +30,15 @@ export function parseCSV(path) {
 }
 
 export function getUsers() {
-  return parseCSV('./data/users.csv')
+  return parseCSV(`${PATH}/users.csv`)
 }
 
 export function getRatings() {
-  return parseCSV('./data/ratings.csv')
+  return parseCSV(`${PATH}/ratings.csv`)
 }
 
 export function getMovies() {
-  return parseCSV('./data/movies.csv')
+  return parseCSV(`${PATH}/movies.csv`)
 }
 
 export function findUser(id) {

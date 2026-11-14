@@ -176,8 +176,8 @@ export class RecommendationController {
       const movie = movies.find((m) => Number(m.MovieId) === movieId)
 
       const recommendation = {
-        movieId,
         movieTitle: movie?.Title,
+        movieId,
         score: Number(ws / similarity).toFixed(4),
       }
 
