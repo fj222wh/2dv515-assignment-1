@@ -8,11 +8,10 @@ export async function getUsers() {
   return data.users
 }
 
-export async function getRecommendations(body, path) {
-  const res = await fetch(`/api/recommendations/${path}`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
+export async function getRecommendations(params, path) {
+  const res = await fetch(`/api/recommendations/${path}?${params}`, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' }
   })
 
   if (!res.ok) {

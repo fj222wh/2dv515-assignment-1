@@ -12,9 +12,12 @@ form.addEventListener('submit', async (event) => {
     const triggeredBtnId = event.submitter.id
 
     if (triggeredBtnId === 'btn-match-users') {
-      const body = Object.fromEntries(new FormData(form))
-      const data = await getRecommendations(body, 'users')
-      renderTable(resultDiv, data, 'Top matching users', ['Name', 'ID', 'Score'])
+      const formData = Object.fromEntries(new FormData(form))
+      const params = new URLSearchParams(formData)
+      console.log(params.toString())
+
+    //   const data = await getRecommendations(params, 'users')
+    //   renderTable(resultDiv, data, 'Top matching users', ['Name', 'ID', 'Score'])
     } else if (triggeredBtnId === 'btn-recommend-movies') {
       const body = Object.fromEntries(new FormData(form))
       const data = await getRecommendations(body, 'movies')
